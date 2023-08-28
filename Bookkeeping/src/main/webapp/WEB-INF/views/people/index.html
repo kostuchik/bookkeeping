@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>All people</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            width: 250px;
+            min-width: 250px;
+            text-align: center;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .button.person {
+            background-color: #17a2b8;
+        }
+
+        .button.create {
+            background-color: #32CD32;
+        }
+
+        .button:hover {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        .button.person:hover {
+            background-color: #139194;
+        }
+
+        .button.create:hover {
+            background-color: #228B22;
+        }
+    </style>
+</head>
+<body>
+
+<div th:each="person:${people}">
+    <a th:href="@{/people/{id}(id=${person.getPerson_id()})}"
+       th:text="${person.getName()  + '  (age: ' + person.getAge() + ')'}"
+       class="button person">user</a>
+</div>
+<br/>
+<hr/>
+<a href="/people/new" class="button create">Add a new person</a>
+
+</body>
+</html>

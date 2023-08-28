@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Add a new book</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      flex-direction: column;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 5px;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      min-width: 250px;
+      text-align: center;
+      background-color: #32CD32;
+      transition: transform 0.3s, background-color 0.3s;
+      border: none;
+    }
+
+    .button:hover {
+      transform: scale(1.1);
+      cursor: pointer;
+    }
+
+    .button.create:hover {
+      background-color: #228B22;
+    }
+
+    .form-container {
+      background-color: #f0f0f0;
+      padding: 20px;
+      border-radius: 15px;
+      max-width: 350px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    label {
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 5px;
+      width: 100%;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .submit-button-container {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+<div class="form-container">
+  <form th:method="POST" th:action="@{/books}" th:object="${book}">
+    <label for="title">Enter title:</label>
+    <input type="text" th:field="*{title}" id="title"/>
+    <!--  <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{t}">NAME ERROR</div>-->
+
+    <label for="author">Enter author:</label>
+    <input type="text" th:field="*{author}" id="author"/>
+    <!--  <div style="color: red" th:if="${#fields.hasErrors('bpm')}" th:errors="*{bpm}">BPM ERROR</div>-->
+
+    <label for="year">Enter year:</label>
+    <input type="text" th:field="*{year}" id="year"/>
+    <!--  <div style="color: red" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">PRICE ERROR</div>-->
+
+    <div class="submit-button-container">
+      <input type="submit" value="Add" class="button create"/>
+    </div>
+  </form>
+</div>
+</body>
+</html>

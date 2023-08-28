@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            min-width: 120px;
+            text-align: center;
+            transition: transform 0.3s, background-color 0.3s;
+            border: none;
+        }
+
+        .button.update {
+            background-color: #32CD32;
+        }
+
+        .button.delete {
+            background-color: #dc3545;
+        }
+
+        .button:hover {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        .button.update:hover {
+            background-color: #228B22;
+        }
+
+        .button.delete:hover {
+            background-color: #c82333;
+        }
+
+        .person-div {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 533px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .name-age {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .button-group {
+            display: flex;
+        }
+
+        ol {
+            margin: 0 auto;
+            display: table;
+        }
+    </style>
+</head>
+<body>
+<div class="person-div">
+    <p class="name-age" th:text="${person.getName() + ' (age: ' + person.getAge() + ')' }">VALUE</p>
+
+    <div th:if="${books.isEmpty()}">
+        <p th:text="'The person has\'t taken a book yet.'">VALUE</p>
+    </div>
+    <ol th:if="${!books.isEmpty()}">
+        <li th:each="book:${books}" th:text="${'&quot;' + book.getTitle() + '&quot; - ' + book.getAuthor() + ' (' + book.getYear()+ ') ' }"></li>
+    </ol>
+    <br>
+    <div class="button-group">
+        <form th:action="@{/people/{id}/edit(id=${person.getPerson_id()})}" style="display: inline-block;">
+            <input type="submit" value="Update" class="button update"/>
+        </form>
+        <form th:method="DELETE" th:action="@{/people/{id} (id=${person.getPerson_id()})}" style="display: inline-block;">
+            <input type="submit" value="Delete" class="button delete"/>
+        </form>
+    </div>
+</div>
+</body>
+</html>

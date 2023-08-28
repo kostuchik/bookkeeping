@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            min-width: 120px;
+            text-align: center;
+            transition: transform 0.3s, background-color 0.3s;
+            border: none;
+        }
+
+        .button.assign {
+            background-color: #17a2b8;
+        }
+
+        .button.update {
+            background-color: #32CD32;
+        }
+
+        .button.delete {
+            background-color: #dc3545;
+        }
+
+        .button:hover {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        .button.assign:hover {
+            background-color: #139194;
+        }
+
+        .button.update:hover {
+            background-color: #228B22;
+        }
+
+        .button.delete:hover {
+            background-color: #c82333;
+        }
+
+        select {
+            border: 1px solid #ccc;
+            background-color: #fff;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            outline: none;
+            transition: background-color 0.3s, border-color 0.3s;
+            margin-top: 5px;
+        }
+
+        select:hover {
+            background-color: #f0f0f0;
+            border-color: #17a2b8;
+        }
+
+        .person-div {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .text-book {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .free-text {
+            color: #008000;
+            font-weight: bold;
+            border: 2px solid #008000;
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .button-group {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+<div class="person-div">
+    <p class="text-book" th:text="${'&quot;' + books.getTitle() + '&quot; - ' + books.getAuthor() + ' (' + books.getYear() + ') '}"></p>
+    <div th:if="${person.isEmpty()}">
+        <p class="free-text">This book is free</p>
+        <form method="POST" th:action="@{/books/{id} (id=${books.getBook_id()})}">
+            <label for="person">Select a person:</label>
+            <select th:object="${person}" th:field="*{person_id}" id="person">
+                <option th:each="person :${people}" th:value="${person.getPerson_id}" th:text="${person.getName}"></option>
+            </select>
+            <input type="submit" value="Assign" class="button assign">
+        </form>
+    </div>
+    <div th:if="${!person.isEmpty()}">
+        <p th:text="${'This book is assigned: ' + person.get().getName()}"></p>
+        <form th:method="PUT" th:action="@{/books/{id}(id=${books.getBook_id()})}" th:object="${books}">
+            <input type="submit" value="Remove" class="button assign"/>
+        </form>
+    </div>
+    <hr>
+    <div class="button-group">
+        <form th:action="@{/books/{id}/edit(id=${books.getBook_id()})}">
+            <input type="submit" value="Update" class="button update"/>
+        </form>
+        <form th:method="DELETE" th:action="@{/books/{id}(id=${books.getBook_id()})}">
+            <input type="submit" value="Delete" class="button delete"/>
+        </form>
+    </div>
+</div>
+</body>
+</html>
