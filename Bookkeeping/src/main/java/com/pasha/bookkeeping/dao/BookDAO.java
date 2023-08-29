@@ -31,7 +31,6 @@ public class BookDAO {
 
     }
 
-
     public void update(int id, Book book) {
         jdbcTemplate.update("UPDATE book  SET title=?, author=?, year=? WHERE book_id=?",
                 book.getTitle(), book.getAuthor(), book.getYear(), id);
@@ -44,7 +43,6 @@ public class BookDAO {
     public void removePerson(int id) {
         jdbcTemplate.update("UPDATE book  SET person_id=null WHERE book_id=?", id);
     }
-
 
     public void savePersonId(Book book, int personId) {
         jdbcTemplate.update("UPDATE book  SET person_id=? WHERE book_id=?", personId, book.getBook_id());

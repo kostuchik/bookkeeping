@@ -15,8 +15,6 @@ public class Book {
     @Min(value = 1900, message = "Year should be greater than 1900")
     private int year;
 
-
-
     public Book() {
     }
 

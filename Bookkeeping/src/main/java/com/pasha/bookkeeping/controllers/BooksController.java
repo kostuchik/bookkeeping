@@ -31,7 +31,6 @@ public class BooksController {
         model.addAttribute("books", bookDAO.showById(id));
         model.addAttribute("person", personDAO.getPersonByBookId(id));
         model.addAttribute("people", personDAO.index());
-
         return "books/show";
     }
 
@@ -43,11 +42,9 @@ public class BooksController {
     @PostMapping()
     public String createBook(@ModelAttribute("book") @Valid Book book,
                              BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
+        if(bindingResult.hasErrors())
             return "books/new";
-        }
         bookDAO.save(book);
-
         return "redirect:/books";
     }
 
@@ -56,7 +53,6 @@ public class BooksController {
                                @RequestParam("person_id") int person_id) {
         Book book = bookDAO.showById(id);
         bookDAO.savePersonId(book, person_id);
-
         return "redirect:/books";
     }
 
@@ -65,7 +61,6 @@ public class BooksController {
     public String editBook(Model model,
                            @PathVariable("id") int id) {
         model.addAttribute("book", bookDAO.showById(id));
-
         return "books/edit";
     }
 
@@ -73,25 +68,21 @@ public class BooksController {
     public String updateBook(@ModelAttribute("book") @Valid Book book,
                              BindingResult bindingResult,
                              @PathVariable("id") int id) {
-        if(bindingResult.hasErrors()) {
+        if(bindingResult.hasErrors())
             return "books/edit";
-        }
         bookDAO.update(id, book);
-
         return "redirect:/books";
     }
 
     @PutMapping("/{id}")
     public String removePerson(@PathVariable("id") int id) {
         bookDAO.removePerson(id);
-
         return "redirect:/books/{id}";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
         bookDAO.delete(id);
-
         return "redirect:/books";
     }
 
