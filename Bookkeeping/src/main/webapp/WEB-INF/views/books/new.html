@@ -75,15 +75,16 @@
   <form th:method="POST" th:action="@{/books}" th:object="${book}">
     <label for="title">Enter title:</label>
     <input type="text" th:field="*{title}" id="title"/>
-    <!--  <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{t}">NAME ERROR</div>-->
+      <div style="color: red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">NAME ERROR</div>
 
     <label for="author">Enter author:</label>
     <input type="text" th:field="*{author}" id="author"/>
-    <!--  <div style="color: red" th:if="${#fields.hasErrors('bpm')}" th:errors="*{bpm}">BPM ERROR</div>-->
+      <div style="color: red" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">BPM ERROR</div>
 
     <label for="year">Enter year:</label>
     <input type="text" th:field="*{year}" id="year"/>
-    <!--  <div style="color: red" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">PRICE ERROR</div>-->
+      <div style="color: red" th:if="${#fields.hasErrors('year')}" th:errors="*{year}">PRICE ERROR</div>
+
 
     <div class="submit-button-container">
       <input type="submit" value="Add" class="button create"/>

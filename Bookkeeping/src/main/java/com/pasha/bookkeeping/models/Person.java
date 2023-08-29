@@ -1,9 +1,17 @@
 package com.pasha.bookkeeping.models;
 
 
+import jakarta.validation.constraints.*;
+import org.springframework.beans.factory.annotation.Value;
+
 public class Person {
     private int person_id;
+    @NotEmpty(message = "Name should not be empty")
+    @Size(min = 2, max = 100, message = "Name should be between 2 and 100 characters")
+    @Pattern(regexp = "^[А-ЯA-Za-z]+[А-Яа-яA-Za-z- ]*$", message = "Name should contain only letters, spaces, and hyphens")
     private String name;
+    @Min(value = 18, message = "Age should be greater than or equal to 18")
+    @Max(value = 120, message = "Age should be less than or equal to 120")
     private int age;
 
     public Person() {

@@ -72,15 +72,14 @@
 </head>
 <body>
 <div class="form-container">
-    <!--    <form th:method="POST" th:action="@{/WEB-INF/views/people}" th:object="${person}">-->
     <form th:method="POST" th:action="@{/people}" th:object="${person}">
         <label for="name">Enter name:</label>
         <input type="text" th:field="*{name}" id="name"/>
-        <!--  <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{t}">NAME ERROR</div>-->
+          <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
 
         <label for="age">Enter age:</label>
         <input type="text" th:field="*{age}" id="age"/>
-        <!--  <div style="color: red" th:if="${#fields.hasErrors('bpm')}" th:errors="*{bpm}">BPM ERROR</div>-->
+        <div style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</div>
 
         <div class="submit-button-container">
             <input type="submit" value="Create" class="button create"/>

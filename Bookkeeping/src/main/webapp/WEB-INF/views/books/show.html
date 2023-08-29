@@ -135,7 +135,7 @@
     <hr>
     <div class="button-group">
         <form th:action="@{/books/{id}/edit(id=${books.getBook_id()})}">
-            <input type="submit" value="Update" class="button update"/>
+            <input type="submit" value="Edit" class="button update"/>
         </form>
         <form th:method="DELETE" th:action="@{/books/{id}(id=${books.getBook_id()})}">
             <input type="submit" value="Delete" class="button delete"/>

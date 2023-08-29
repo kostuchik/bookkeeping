@@ -91,7 +91,7 @@
     <br>
     <div class="button-group">
         <form th:action="@{/people/{id}/edit(id=${person.getPerson_id()})}" style="display: inline-block;">
-            <input type="submit" value="Update" class="button update"/>
+            <input type="submit" value="Edit" class="button update"/>
         </form>
         <form th:method="DELETE" th:action="@{/people/{id} (id=${person.getPerson_id()})}" style="display: inline-block;">
             <input type="submit" value="Delete" class="button delete"/>

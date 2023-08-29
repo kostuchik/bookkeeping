@@ -3,8 +3,10 @@ package com.pasha.bookkeeping.controllers;
 import com.pasha.bookkeeping.dao.BookDAO;
 import com.pasha.bookkeeping.dao.PersonDAO;
 import com.pasha.bookkeeping.models.Book;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -18,7 +20,6 @@ public class BooksController {
         this.personDAO = personDAO;
     }
 
-
     @GetMapping()
     public String index(Model model) {
         model.addAttribute("books", bookDAO.index());
@@ -27,13 +28,12 @@ public class BooksController {
 
     @GetMapping("/{id}")
     public String showBook(@PathVariable("id") int id, Model model) {
-        model.addAttribute("books", bookDAO.showId(id));
+        model.addAttribute("books", bookDAO.showById(id));
         model.addAttribute("person", personDAO.getPersonByBookId(id));
         model.addAttribute("people", personDAO.index());
 
         return "books/show";
     }
-
 
     @GetMapping("/new")
     public String newBook(@ModelAttribute("book") Book book) {
@@ -41,8 +41,11 @@ public class BooksController {
     }
 
     @PostMapping()
-    public String saveBook(@ModelAttribute("book") Book book) {
-
+    public String createBook(@ModelAttribute("book") @Valid Book book,
+                             BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return "books/new";
+        }
         bookDAO.save(book);
 
         return "redirect:/books";
@@ -51,7 +54,7 @@ public class BooksController {
     @PostMapping("/{id}")
     public String savePersonId(@PathVariable("id") int id,
                                @RequestParam("person_id") int person_id) {
-        Book book = bookDAO.showId(id);
+        Book book = bookDAO.showById(id);
         bookDAO.savePersonId(book, person_id);
 
         return "redirect:/books";
@@ -61,20 +64,27 @@ public class BooksController {
     @GetMapping("/{id}/edit")
     public String editBook(Model model,
                            @PathVariable("id") int id) {
-        model.addAttribute("book", bookDAO.showId(id));
+        model.addAttribute("book", bookDAO.showById(id));
+
         return "books/edit";
     }
 
     @PatchMapping("/{id}")
-    public String updateBook(@ModelAttribute("book") Book book,
+    public String updateBook(@ModelAttribute("book") @Valid Book book,
+                             BindingResult bindingResult,
                              @PathVariable("id") int id) {
+        if(bindingResult.hasErrors()) {
+            return "books/edit";
+        }
         bookDAO.update(id, book);
+
         return "redirect:/books";
     }
 
     @PutMapping("/{id}")
-    public String PeBook(@PathVariable("id") int id) {
-        bookDAO.deletePerson(id);
+    public String removePerson(@PathVariable("id") int id) {
+        bookDAO.removePerson(id);
+
         return "redirect:/books/{id}";
     }
 
