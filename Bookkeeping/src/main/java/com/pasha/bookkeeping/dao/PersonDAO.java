@@ -27,6 +27,12 @@ public class PersonDAO {
         return jdbcTemplate.query("SELECT*FROM person WHERE person_id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
                 .stream().findAny().orElse(null);
     }
+    public Optional<Person> show(String name){
+        return jdbcTemplate.query("SELECT * FROM person WHERE name=?"
+                , new Object[]{name}
+                , new BeanPropertyRowMapper<>(Person.class))
+                .stream().findAny();
+    }
 
     public void save(Person person) {
         jdbcTemplate.update("INSERT INTO person (name, age) VALUES (?,?)", person.getName(), person.getAge());
@@ -48,9 +54,9 @@ public class PersonDAO {
     }
 
     public Optional<Person>  getPersonByBookId(int id) {
-        Person person =  jdbcTemplate.query("SELECT * FROM  person p join book b on p.person_id = b.person_id WHERE book_id=?"
-                , new Object[]{id}, new BeanPropertyRowMapper<>(Person.class)).stream().findAny().orElse(null);
-        Optional<Person> person2 = Optional.ofNullable(person);
-        return person2;
+        Optional<Person> person =  jdbcTemplate.query("SELECT * FROM  person p join book b on p.person_id = b.person_id WHERE book_id=?"
+                , new Object[]{id}
+                , new BeanPropertyRowMapper<>(Person.class)).stream().findAny();
+        return person;
     }
 }
