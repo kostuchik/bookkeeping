@@ -52,6 +52,25 @@
       <artifactId>hibernate-validator</artifactId>
       <version>8.0.1.Final</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
+    <dependency>
+      <groupId>org.hibernate.orm</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>6.3.0.Final</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-orm -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+      <version>6.0.11</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api -->
+    <dependency>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+      <version>3.0.2</version>
+    </dependency>
+
 
   </dependencies>
 
