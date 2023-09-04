@@ -74,15 +74,15 @@
 <div class="form-container">
     <form th:method="PATCH" th:action="@{/people/{id}(id=${person.getPerson_id()})}" th:object="${person}">
         <label for="name">Enter name:</label>
-        <input type="text" th:field="*{name}" id="name" />
+        <input type="text" th:field="*{name}" id="name"/>
         <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Age error</div>
 
         <label for="age">Enter age:</label>
-        <input type="text" th:field="*{age}" id="age" />
+        <input type="text" th:field="*{age}" id="age"/>
         <div style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</div>
 
         <div class="submit-button-container">
-            <input type="submit" value="Update!" class="button update" />
+            <input type="submit" value="Update!" class="button update"/>
         </div>
     </form>
 </div>

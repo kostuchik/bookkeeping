@@ -86,14 +86,16 @@
         <p th:text="'The person has\'t taken a book yet.'">VALUE</p>
     </div>
     <ol th:if="${!books.isEmpty()}">
-        <li th:each="book:${books}" th:text="${'&quot;' + book.getTitle() + '&quot; - ' + book.getAuthor() + ' (' + book.getYear()+ ') ' }"></li>
+        <li th:each="book:${books}"
+            th:text="${'&quot;' + book.getTitle() + '&quot; - ' + book.getAuthor() + ' (' + book.getYear()+ ') ' }"></li>
     </ol>
     <br>
     <div class="button-group">
         <form th:action="@{/people/{id}/edit(id=${person.getPerson_id()})}" style="display: inline-block;">
             <input type="submit" value="Edit" class="button update"/>
         </form>
-        <form th:method="DELETE" th:action="@{/people/{id} (id=${person.getPerson_id()})}" style="display: inline-block;">
+        <form th:method="DELETE" th:action="@{/people/{id} (id=${person.getPerson_id()})}"
+              style="display: inline-block;">
             <input type="submit" value="Delete" class="button delete"/>
         </form>
     </div>

@@ -1,50 +1,71 @@
 package com.pasha.bookkeeping.dao;
 
 import com.pasha.bookkeeping.models.Book;
+import com.pasha.bookkeeping.models.Person;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Component
+@Repository
 public class BookDAO {
-    private final JdbcTemplate jdbcTemplate;
+    private final SessionFactory sessionFactory;
 
     @Autowired
-    public BookDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public BookDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
+    @Transactional
     public List<Book> index() {
-        return jdbcTemplate.query("SELECT * FROM book", new BeanPropertyRowMapper<>(Book.class));
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("FROM Book", Book.class).getResultList();
     }
 
-    public Book showById(int id) {
-        return jdbcTemplate.query("SELECT * FROM book WHERE book_id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Book.class))
-                .stream().findAny().orElse(null);
+    @Transactional
+    public Book show(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(Book.class, id);
     }
 
+    @Transactional
     public void save(Book book) {
-        jdbcTemplate.update("INSERT INTO book (title, author, year) VALUES (?,?,?)", book.getTitle(), book.getAuthor(), book.getYear());
-
+        Session session = sessionFactory.getCurrentSession();
+        session.save(book);
     }
 
+    @Transactional
     public void update(int id, Book book) {
-        jdbcTemplate.update("UPDATE book  SET title=?, author=?, year=? WHERE book_id=?",
-                book.getTitle(), book.getAuthor(), book.getYear(), id);
+        Session session = sessionFactory.getCurrentSession();
+        Book bookUpdate = session.get(Book.class, id);
+        bookUpdate.setTitle(book.getTitle());
+        bookUpdate.setAuthor(book.getAuthor());
+        bookUpdate.setYear(book.getYear());
     }
 
+    @Transactional
     public void delete(int id) {
-        jdbcTemplate.update("DELETE FROM book WHERE book_id=?", id);
+        Session session = sessionFactory.getCurrentSession();
+        Book book = session.get(Book.class, id);
+        session.delete(book);
     }
 
+    @Transactional
     public void removePerson(int id) {
-        jdbcTemplate.update("UPDATE book  SET person_id=null WHERE book_id=?", id);
+        Session session = sessionFactory.getCurrentSession();
+        Book book = session.get(Book.class, id);
+        book.setPerson(null);
     }
 
+    @Transactional
     public void savePersonId(Book book, int personId) {
-        jdbcTemplate.update("UPDATE book  SET person_id=? WHERE book_id=?", personId, book.getBook_id());
+        Session session = sessionFactory.getCurrentSession();
+        Person person = session.get(Person.class, personId);
+        Book bookUpdate = session.get(Book.class, book.getBook_id());
+        bookUpdate.setPerson(person);
     }
 }

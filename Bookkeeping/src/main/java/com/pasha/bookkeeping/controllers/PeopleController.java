@@ -40,7 +40,7 @@ public class PeopleController {
     @PostMapping()
     public String createPerson(@ModelAttribute("person") @Valid Person person,
                                BindingResult bindingResult) {
-        if(bindingResult.hasErrors())
+        if (bindingResult.hasErrors())
             return "people/new";
         personDAO.save(person);
         return "redirect:/people";
@@ -57,7 +57,7 @@ public class PeopleController {
     public String updatePerson(@ModelAttribute("person") @Valid Person person,
                                BindingResult bindingResult,
                                @PathVariable("id") int id) {
-        if(bindingResult.hasErrors())
+        if (bindingResult.hasErrors())
             return "people/edit";
         personDAO.update(id, person);
         return "redirect:/people";

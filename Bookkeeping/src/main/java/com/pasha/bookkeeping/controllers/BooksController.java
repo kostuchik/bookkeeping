@@ -28,7 +28,7 @@ public class BooksController {
 
     @GetMapping("/{id}")
     public String showBook(@PathVariable("id") int id, Model model) {
-        model.addAttribute("books", bookDAO.showById(id));
+        model.addAttribute("books", bookDAO.show(id));
         model.addAttribute("person", personDAO.getPersonByBookId(id));
         model.addAttribute("people", personDAO.index());
         return "books/show";
@@ -42,7 +42,7 @@ public class BooksController {
     @PostMapping()
     public String createBook(@ModelAttribute("book") @Valid Book book,
                              BindingResult bindingResult) {
-        if(bindingResult.hasErrors())
+        if (bindingResult.hasErrors())
             return "books/new";
         bookDAO.save(book);
         return "redirect:/books";
@@ -51,7 +51,7 @@ public class BooksController {
     @PostMapping("/{id}")
     public String savePersonId(@PathVariable("id") int id,
                                @RequestParam("person_id") int person_id) {
-        Book book = bookDAO.showById(id);
+        Book book = bookDAO.show(id);
         bookDAO.savePersonId(book, person_id);
         return "redirect:/books";
     }
@@ -60,7 +60,7 @@ public class BooksController {
     @GetMapping("/{id}/edit")
     public String editBook(Model model,
                            @PathVariable("id") int id) {
-        model.addAttribute("book", bookDAO.showById(id));
+        model.addAttribute("book", bookDAO.show(id));
         return "books/edit";
     }
 
@@ -68,7 +68,7 @@ public class BooksController {
     public String updateBook(@ModelAttribute("book") @Valid Book book,
                              BindingResult bindingResult,
                              @PathVariable("id") int id) {
-        if(bindingResult.hasErrors())
+        if (bindingResult.hasErrors())
             return "books/edit";
         bookDAO.update(id, book);
         return "redirect:/books";

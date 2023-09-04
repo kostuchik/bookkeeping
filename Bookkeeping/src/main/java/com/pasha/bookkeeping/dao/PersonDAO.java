@@ -2,55 +2,76 @@ package com.pasha.bookkeeping.dao;
 
 import com.pasha.bookkeeping.models.Book;
 import com.pasha.bookkeeping.models.Person;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Repository
 public class PersonDAO {
-    private final JdbcTemplate jdbcTemplate;
+    private final SessionFactory sessionFactory;
 
     @Autowired
-    public PersonDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public PersonDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
+    @Transactional
     public List<Person> index() {
-        return jdbcTemplate.query("SELECT * FROM person", new BeanPropertyRowMapper<>(Person.class));
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("FROM Person", Person.class).getResultList();
     }
 
+    @Transactional
     public Person show(int id) {
-        return jdbcTemplate.query("SELECT*FROM person WHERE person_id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
-                .stream().findAny().orElse(null);
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(Person.class, id);
     }
 
+    @Transactional
     public void save(Person person) {
-        jdbcTemplate.update("INSERT INTO person (name, age) VALUES (?,?)", person.getName(), person.getAge());
+        Session session = sessionFactory.getCurrentSession();
+        session.save(person);
     }
 
+    @Transactional
     public void update(int id, Person person) {
-        jdbcTemplate.update("UPDATE person SET name=?, age=? WHERE person_id=?", person.getName(), person.getAge(), id);
+        Session session = sessionFactory.getCurrentSession();
+        Person personUpdate = session.get(Person.class, id);
+        personUpdate.setName(person.getName());
+        personUpdate.setAge(person.getAge());
     }
 
+    @Transactional
     public void delete(int id) {
-        jdbcTemplate.update("DELETE FROM person WHERE person_id=?", id);
+        Session session = sessionFactory.getCurrentSession();
+        Person person = session.get(Person.class, id);
+        session.delete(person);
     }
 
+    @Transactional
     public List<Book> getBooksByPersonId(int id) {
-        List<Book> book = jdbcTemplate.query("SELECT * FROM book WHERE person_id=?"
-                , new Object[]{show(id).getPerson_id()}
-                , new BeanPropertyRowMapper<>(Book.class)).stream().toList();
-        return book;
+        Session session = sessionFactory.getCurrentSession();
+        Person person = session.get(Person.class, id);
+        List<Book> books = session.createQuery("FROM Book WHERE person=:person")
+                .setParameter("person", person)
+                .getResultList();
+        return books;
     }
 
-    public Optional<Person>  getPersonByBookId(int id) {
-        Person person =  jdbcTemplate.query("SELECT * FROM  person p join book b on p.person_id = b.person_id WHERE book_id=?"
-                , new Object[]{id}, new BeanPropertyRowMapper<>(Person.class)).stream().findAny().orElse(null);
-        Optional<Person> person2 = Optional.ofNullable(person);
-        return person2;
+    @Transactional
+    public Optional<Person> getPersonByBookId(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        Optional<Person> person = session.createQuery("SELECT p FROM Person p JOIN p.bookList b  WHERE  b.book_id=:book_id", Person.class)
+                .setParameter("book_id", id)
+                .uniqueResultOptional();
+        return person;
     }
 }

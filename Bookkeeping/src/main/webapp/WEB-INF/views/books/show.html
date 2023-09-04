@@ -115,13 +115,15 @@
 </head>
 <body>
 <div class="person-div">
-    <p class="text-book" th:text="${'&quot;' + books.getTitle() + '&quot; - ' + books.getAuthor() + ' (' + books.getYear() + ') '}"></p>
+    <p class="text-book"
+       th:text="${'&quot;' + books.getTitle() + '&quot; - ' + books.getAuthor() + ' (' + books.getYear() + ') '}"></p>
     <div th:if="${person.isEmpty()}">
         <p class="free-text">This book is free</p>
         <form method="POST" th:action="@{/books/{id} (id=${books.getBook_id()})}">
             <label for="person">Select a person:</label>
             <select th:object="${person}" th:field="*{person_id}" id="person">
-                <option th:each="person :${people}" th:value="${person.getPerson_id}" th:text="${person.getName}"></option>
+                <option th:each="person :${people}" th:value="${person.getPerson_id}"
+                        th:text="${person.getName}"></option>
             </select>
             <input type="submit" value="Assign" class="button assign">
         </form>

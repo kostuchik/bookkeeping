@@ -11,12 +11,13 @@ public class MySpringMvcDispatcherServletInitializer extends AbstractAnnotationC
     }
 
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[] {MyConfig.class};
+        return new Class[]{MyConfig.class};
     }
 
     protected String[] getServletMappings() {
         return new String[]{"/"};
     }
+
     @Override
     public void onStartup(ServletContext aServletContext) throws ServletException {
         super.onStartup(aServletContext);
@@ -25,6 +26,6 @@ public class MySpringMvcDispatcherServletInitializer extends AbstractAnnotationC
 
     private void registerHiddenFieldFilter(ServletContext aContext) {
         aContext.addFilter("hiddenHttpMethodFilter",
-                new HiddenHttpMethodFilter()).addMappingForUrlPatterns(null ,true, "/*");
+                new HiddenHttpMethodFilter()).addMappingForUrlPatterns(null, true, "/*");
     }
 }
