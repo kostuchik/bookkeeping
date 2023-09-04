@@ -44,7 +44,7 @@ public class BookDAO {
         jdbcTemplate.update("UPDATE book  SET person_id=null WHERE book_id=?", id);
     }
 
-    public void assignPerson(Book book, int personId) {
+    public void savePersonId(Book book, int personId) {
         jdbcTemplate.update("UPDATE book  SET person_id=? WHERE book_id=?", personId, book.getBook_id());
     }
 }

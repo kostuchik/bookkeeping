@@ -2,7 +2,6 @@ package com.pasha.bookkeeping.controllers;
 
 import com.pasha.bookkeeping.dao.PersonDAO;
 import com.pasha.bookkeeping.models.Person;
-import com.pasha.bookkeeping.util.PersonValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,12 +13,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/people")
 public class PeopleController {
     private final PersonDAO personDAO;
-    private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
+    public PeopleController(PersonDAO personDAO) {
         this.personDAO = personDAO;
-        this.personValidator = personValidator;
     }
 
     @GetMapping()
@@ -43,8 +40,6 @@ public class PeopleController {
     @PostMapping()
     public String createPerson(@ModelAttribute("person") @Valid Person person,
                                BindingResult bindingResult) {
-        personValidator.validate(person, bindingResult);
-
         if(bindingResult.hasErrors())
             return "people/new";
         personDAO.save(person);
@@ -62,7 +57,6 @@ public class PeopleController {
     public String updatePerson(@ModelAttribute("person") @Valid Person person,
                                BindingResult bindingResult,
                                @PathVariable("id") int id) {
-        personValidator.validate(person, bindingResult);
         if(bindingResult.hasErrors())
             return "people/edit";
         personDAO.update(id, person);
