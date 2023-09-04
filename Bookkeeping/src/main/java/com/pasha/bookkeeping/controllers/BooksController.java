@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-
 @Controller
 @RequestMapping("/books")
 public class BooksController {
@@ -29,8 +28,8 @@ public class BooksController {
 
     @GetMapping("/{id}")
     public String showBook(@PathVariable("id") int id, Model model) {
-        model.addAttribute("books", bookDAO.show(id));
-//        model.addAttribute("person", personDAO.getPersonByBookId(id));
+        model.addAttribute("books", bookDAO.showById(id));
+        model.addAttribute("person", personDAO.getPersonByBookId(id));
         model.addAttribute("people", personDAO.index());
         return "books/show";
     }
@@ -43,7 +42,7 @@ public class BooksController {
     @PostMapping()
     public String createBook(@ModelAttribute("book") @Valid Book book,
                              BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
+        if(bindingResult.hasErrors())
             return "books/new";
         bookDAO.save(book);
         return "redirect:/books";
@@ -52,7 +51,7 @@ public class BooksController {
     @GetMapping("/{id}/edit")
     public String editBook(Model model,
                            @PathVariable("id") int id) {
-        model.addAttribute("book", bookDAO.show(id));
+        model.addAttribute("book", bookDAO.showById(id));
         return "books/edit";
     }
 
@@ -60,7 +59,7 @@ public class BooksController {
     public String updateBook(@ModelAttribute("book") @Valid Book book,
                              BindingResult bindingResult,
                              @PathVariable("id") int id) {
-        if (bindingResult.hasErrors())
+        if(bindingResult.hasErrors())
             return "books/edit";
         bookDAO.update(id, book);
         return "redirect:/books";
@@ -71,19 +70,19 @@ public class BooksController {
         bookDAO.delete(id);
         return "redirect:/books";
     }
-//
-//    @PutMapping("/{id}")
-//    public String removePerson(@PathVariable("id") int id) {
-//        bookDAO.removePerson(id);
-//        return "redirect:/books/{id}";
-//    }
-//
-//    @PostMapping("/{id}")
-//    public String assignPersonId(@PathVariable("id") int id,
-//                                 @RequestParam("person_id") int person_id) {
-//        Book book = bookDAO.showById(id);
-//        bookDAO.assignPerson(book, person_id);
-//        return "redirect:/books";
-//    }
+
+    @PutMapping("/{id}")
+    public String removePerson(@PathVariable("id") int id) {
+        bookDAO.removePerson(id);
+        return "redirect:/books/{id}";
+    }
+
+    @PostMapping("/{id}")
+    public String assignPersonId(@PathVariable("id") int id,
+                                 @RequestParam("person_id") int person_id) {
+        Book book = bookDAO.showById(id);
+        bookDAO.assignPerson(book, person_id);
+        return "redirect:/books";
+    }
 
 }

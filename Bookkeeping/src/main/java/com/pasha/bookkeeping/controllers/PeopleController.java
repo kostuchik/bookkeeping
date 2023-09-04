@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
@@ -32,6 +31,7 @@ public class PeopleController {
     @GetMapping("/{id}")
     public String showPerson(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", personDAO.show(id));
+        model.addAttribute("books", personDAO.getBooksByPersonId(id));
         return "people/show";
     }
 
@@ -41,7 +41,12 @@ public class PeopleController {
     }
 
     @PostMapping()
-    public String createPerson(@ModelAttribute("person") Person person) {
+    public String createPerson(@ModelAttribute("person") @Valid Person person,
+                               BindingResult bindingResult) {
+        personValidator.validate(person, bindingResult);
+
+        if(bindingResult.hasErrors())
+            return "people/new";
         personDAO.save(person);
         return "redirect:/people";
     }

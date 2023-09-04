@@ -3,28 +3,17 @@ package com.pasha.bookkeeping.models;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import org.springframework.beans.factory.annotation.Value;
-import javax.persistence.*;
 
-
-@Entity
-@Table(name = "book")
 public class Book {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int book_id;
-
-    @Column(name = "title")
+    @NotEmpty(message = "Title should not be empty")
+    @Size(min = 2, max = 100, message = ("Title should be between 2 and 100 characters"))
     private String title;
-
-    @Column(name = "author")
+    @NotEmpty(message = "Author should not be empty")
+    @Size(min = 2, max = 100, message = ("Author should be between 2 and 100 characters"))
     private String author;
-    @Column(name = "year")
+    @Min(value = 1900, message = "Year should be greater than 1900")
     private int year;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "person_id", referencedColumnName = "person_id")
-    private Person person;
-
 
     public Book() {
     }
@@ -65,12 +54,5 @@ public class Book {
 
     public void setYear(int year) {
         this.year = year;
-    }
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
     }
 }
