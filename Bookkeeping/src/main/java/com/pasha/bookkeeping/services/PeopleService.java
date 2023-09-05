@@ -31,6 +31,10 @@ public class PeopleService {
         Optional<Person> foundPerson = peopleRepository.findById(id);
         return foundPerson.orElse(null);
     }
+    public Optional<Person> show(String name) {
+        Optional<Person> foundPerson = peopleRepository.findByName(name);
+        return foundPerson;
+    }
 
     public void save(Person person) {
         peopleRepository.save(person);
