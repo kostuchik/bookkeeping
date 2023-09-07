@@ -87,7 +87,8 @@
     </div>
     <ol th:if="${!books.isEmpty()}">
         <li th:each="book:${books}"
-            th:text="${'&quot;' + book.getTitle() + '&quot; - ' + book.getAuthor() + ' (' + book.getYear()+ ') ' }"></li>
+            th:text="${'&quot;' + book.getTitle() + '&quot; - ' + book.getAuthor() + ' (' + book.getYear()+ ') ' } "
+            th:style="${book.isExpired()} ? 'color:red;' : ''"></li>
     </ol>
     <br>
     <div class="button-group">

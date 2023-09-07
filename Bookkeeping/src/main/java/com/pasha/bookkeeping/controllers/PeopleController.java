@@ -1,5 +1,6 @@
 package com.pasha.bookkeeping.controllers;
 
+import com.pasha.bookkeeping.models.Book;
 import com.pasha.bookkeeping.models.Person;
 import com.pasha.bookkeeping.services.PeopleService;
 import com.pasha.bookkeeping.util.PersonValidator;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/people")
@@ -30,8 +33,10 @@ public class PeopleController {
 
     @GetMapping("/{id}")
     public String showPerson(@PathVariable("id") int id, Model model) {
+
         model.addAttribute("person", peopleService.show(id));
         model.addAttribute("books", peopleService.getBooksByPersonId(id));
+
         return "people/show";
     }
 
@@ -73,6 +78,4 @@ public class PeopleController {
         peopleService.delete(id);
         return "redirect:/people";
     }
-
-
 }

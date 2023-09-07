@@ -10,6 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +33,7 @@ public class BooksService {
 
     public Book show(int id) {
         Optional<Book> foundBook = booksRepository.findById(id);
+
         return foundBook.orElse(null);
     }
 
@@ -50,13 +53,16 @@ public class BooksService {
     public void removePerson(int id) {
         Book book = show(id);
         book.setPerson(null);
+        book.setDateOfTaken(null);
         booksRepository.save(book);
     }
 
-    public void savePersonId(Book book, int personId) {
+    public void assignPerson(Book book, int personId) {
         Optional<Person> person = peopleRepository.findById(personId);
         book.setPerson(person.get());
+        book.setDateOfTaken(new Date());
         booksRepository.save(book);
+
     }
 
     public List<Book> sortAndPagination(Integer page, Integer bookPerPage, Boolean sortByYear) {
@@ -64,6 +70,7 @@ public class BooksService {
             page = 0;
         if (bookPerPage == null || bookPerPage < 1)
             bookPerPage = index().size();
+
         Sort sort;
         if (Boolean.TRUE.equals(sortByYear)) {
             sort = Sort.by("year");
@@ -71,5 +78,13 @@ public class BooksService {
             sort = Sort.unsorted();
         }
         return booksRepository.findAll(PageRequest.of(page, bookPerPage, sort)).getContent();
+    }
+
+    public List<Book> search(String search) {
+        if (search == null || search.length() == 0) {
+            return new ArrayList<>();
+        } else {
+            return booksRepository.findByTitleStartingWith(search);
+        }
     }
 }

@@ -1,7 +1,5 @@
 package com.pasha.bookkeeping.controllers;
 
-import com.pasha.bookkeeping.dao.BookDAO;
-import com.pasha.bookkeeping.dao.PersonDAO;
 import com.pasha.bookkeeping.models.Book;
 import com.pasha.bookkeeping.services.BooksService;
 import com.pasha.bookkeeping.services.PeopleService;
@@ -11,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/books")
@@ -57,14 +57,6 @@ public class BooksController {
         return "redirect:/books";
     }
 
-    @PostMapping("/{id}")
-    public String savePersonId(@PathVariable("id") int id,
-                               @RequestParam("person_id") int person_id) {
-        Book book = booksService.show(id);
-        booksService.savePersonId(book, person_id);
-        return "redirect:/books";
-    }
-
 
     @GetMapping("/{id}/edit")
     public String editBook(Model model,
@@ -83,15 +75,41 @@ public class BooksController {
         return "redirect:/books";
     }
 
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") int id) {
+        booksService.delete(id);
+        return "redirect:/books";
+    }
+
     @PutMapping("/{id}")
     public String removePerson(@PathVariable("id") int id) {
         booksService.removePerson(id);
         return "redirect:/books/{id}";
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
-        booksService.delete(id);
+    @PostMapping("/{id}")
+    public String assignPerson(@PathVariable("id") int id,
+                               @RequestParam("person_id") int person_id) {
+        Book book = booksService.show(id);
+        booksService.assignPerson(book, person_id);
         return "redirect:/books";
+    }
+
+    @GetMapping("/search")
+    public String search(@RequestParam(value = "searchQuery", required = false) String searchQuery,
+                         Model model) {
+
+        if (searchQuery != null) {
+            model.addAttribute("searchClicked", true);
+        }
+
+        List<Book> books = booksService.search(searchQuery);
+
+        if (books.size() > 0) {
+            model.addAttribute("foundBook", books.get(0));
+        } else {
+            model.addAttribute("errorMessage", "This book is not found");
+        }
+        return "books/search";
     }
 }

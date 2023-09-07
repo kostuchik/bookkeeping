@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "book")
 public class Book {
@@ -25,6 +27,11 @@ public class Book {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private Person person;
+    @Column(name = "date_of_taken")
+    @Temporal(TemporalType.DATE)
+    private Date dateOfTaken;
+    @Transient
+    private boolean expired = false;
 
     public Book() {
     }
@@ -73,5 +80,22 @@ public class Book {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+
+    public Date getDateOfTaken() {
+        return dateOfTaken;
+    }
+
+    public void setDateOfTaken(Date dateOfTaken) {
+        this.dateOfTaken = dateOfTaken;
+    }
+
+    public boolean isExpired() {
+        return expired;
+    }
+
+    public void setExpired(boolean expired) {
+        this.expired = expired;
     }
 }
