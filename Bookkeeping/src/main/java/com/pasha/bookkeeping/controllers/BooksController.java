@@ -96,20 +96,14 @@ public class BooksController {
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam(value = "searchQuery", required = false) String searchQuery,
+    public String search() {
+        return "books/search";
+    }
+
+    @PostMapping("/search")
+    public String search(@RequestParam("searchQuery") String searchQuery,
                          Model model) {
-
-        if (searchQuery != null) {
-            model.addAttribute("searchClicked", true);
-        }
-
-        List<Book> books = booksService.search(searchQuery);
-
-        if (books.size() > 0) {
-            model.addAttribute("foundBook", books.get(0));
-        } else {
-            model.addAttribute("errorMessage", "This book is not found");
-        }
+        model.addAttribute("books",booksService.search(searchQuery));
         return "books/search";
     }
 }

@@ -1,6 +1,5 @@
 package com.pasha.bookkeeping.controllers;
 
-import com.pasha.bookkeeping.models.Book;
 import com.pasha.bookkeeping.models.Person;
 import com.pasha.bookkeeping.services.PeopleService;
 import com.pasha.bookkeeping.util.PersonValidator;
@@ -10,8 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/people")
@@ -66,7 +63,7 @@ public class PeopleController {
     public String updatePerson(@ModelAttribute("person") @Valid Person person,
                                BindingResult bindingResult,
                                @PathVariable("id") int id) {
-        personValidator.validate(person, bindingResult);
+
         if (bindingResult.hasErrors())
             return "people/edit";
         peopleService.update(id, person);

@@ -1,6 +1,5 @@
 package com.pasha.bookkeeping.util;
 
-import com.pasha.bookkeeping.dao.PersonDAO;
 import com.pasha.bookkeeping.models.Person;
 import com.pasha.bookkeeping.services.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;

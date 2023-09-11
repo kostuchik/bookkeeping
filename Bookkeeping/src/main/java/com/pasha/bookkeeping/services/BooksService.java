@@ -81,10 +81,6 @@ public class BooksService {
     }
 
     public List<Book> search(String search) {
-        if (search == null || search.length() == 0) {
-            return new ArrayList<>();
-        } else {
             return booksRepository.findByTitleStartingWith(search);
-        }
     }
 }
